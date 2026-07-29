@@ -1,0 +1,362 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'none'; form-action 'none'; base-uri 'none'; frame-ancestors 'none'">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<title>MV Automation — Interaktywne Demo Centrum Dowodzenia</title>
+<style>
+:root{
+ --bg:#0a0f1e;--bg2:#0e1528;--card:#131c33;--card2:#182240;--line:#25304f;
+ --txt:#eef2fb;--sec:#93a0be;--dim:#6b7699;
+ --gold:#E9C46A;--navy:#13294B;
+ --green:#22c98a;--green-bg:#0f2f24;--orange:#ff9f43;--orange-bg:#3a2611;--red:#ff6b6b;--blue:#4d9bff;
+ --shadow:0 10px 30px rgba(0,0,0,.35);
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{background:radial-gradient(1200px 600px at 80% -10%,#16213f 0%,var(--bg) 60%);color:var(--txt);
+ font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Inter,Arial,sans-serif;line-height:1.5;padding-bottom:76px}
+.wrap{max-width:1180px;margin:0 auto;padding:16px}
+.demoflag{position:fixed;top:0;left:0;right:0;z-index:60;background:linear-gradient(90deg,#3a2611,#4a2f12);
+ color:var(--orange);text-align:center;font-size:12px;font-weight:700;letter-spacing:.05em;padding:6px;border-bottom:1px solid #5a3a18}
+header.hero{margin-top:34px;background:linear-gradient(135deg,var(--navy),#0b1730);border:1px solid var(--line);
+ border-radius:22px;padding:28px 22px;position:relative;overflow:hidden;box-shadow:var(--shadow)}
+header.hero:before{content:"";position:absolute;right:-60px;top:-60px;width:220px;height:220px;
+ background:radial-gradient(circle,rgba(233,196,106,.18),transparent 70%)}
+.brand{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:.02em}
+.logo{width:36px;height:36px;border-radius:9px;background:linear-gradient(135deg,var(--gold),#c99a3a);
+ color:var(--navy);display:flex;align-items:center;justify-content:center;font-weight:900}
+h1{font-size:26px;line-height:1.2;margin:16px 0 8px;font-weight:800}
+.sub{color:var(--sec);font-size:15px;max-width:640px}
+.livedot{display:inline-flex;align-items:center;gap:7px;background:var(--green-bg);border:1px solid #1c5a42;
+ color:var(--green);border-radius:999px;padding:5px 12px;font-size:12px;font-weight:700;margin-top:14px}
+.livedot i{width:8px;height:8px;border-radius:50%;background:var(--green);animation:pulse 1.6s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(34,201,138,.6)}70%{box-shadow:0 0 0 8px rgba(34,201,138,0)}100%{box-shadow:0 0 0 0 rgba(34,201,138,0)}}
+h2.sec{font-size:13px;text-transform:uppercase;letter-spacing:.12em;color:var(--sec);margin:30px 6px 12px;font-weight:800;display:flex;align-items:center;gap:8px}
+h2.sec span.n{width:22px;height:22px;border-radius:6px;background:var(--card2);color:var(--gold);display:inline-flex;align-items:center;justify-content:center;font-size:11px;border:1px solid var(--line)}
+.grid{display:grid;gap:12px}
+.g2{grid-template-columns:repeat(2,1fr)}.g3{grid-template-columns:repeat(3,1fr)}.g4{grid-template-columns:repeat(4,1fr)}
+.card{background:linear-gradient(180deg,var(--card),var(--bg2));border:1px solid var(--line);border-radius:16px;padding:16px;box-shadow:var(--shadow)}
+.kpi .lab{color:var(--sec);font-size:12.5px;font-weight:600;display:flex;justify-content:space-between;align-items:center}
+.kpi .big{font-size:28px;font-weight:800;margin-top:6px;letter-spacing:-.5px}
+.kpi .chg{font-size:12px;margin-top:4px;font-weight:700}
+.up{color:var(--green)}.down{color:var(--red)}.muted{color:var(--dim)}
+.tag{font-size:10.5px;font-weight:800;padding:2px 7px;border-radius:6px;text-transform:uppercase;letter-spacing:.04em}
+.tag.real{background:var(--green-bg);color:var(--green);border:1px solid #1c5a42}
+.tag.pipe{background:#1a2340;color:var(--blue);border:1px solid #26407a}
+.tag.est{background:var(--orange-bg);color:var(--orange);border:1px solid #5a3a18}
+.spark{display:flex;align-items:flex-end;gap:3px;height:34px;margin-top:10px}
+.spark i{flex:1;background:linear-gradient(180deg,var(--gold),#8a6a24);border-radius:2px;opacity:.85}
+.flow{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:6px 0 2px}
+.node{background:var(--card2);border:1px solid var(--line);border-radius:9px;padding:6px 10px;font-size:12px;font-weight:700;white-space:nowrap}
+.node.active{background:var(--green-bg);border-color:#1c5a42;color:var(--green);box-shadow:0 0 0 3px rgba(34,201,138,.12)}
+.arr{color:var(--dim);font-size:12px}
+.agent{display:flex;gap:12px;align-items:flex-start;padding:12px;border:1px solid var(--line);border-radius:13px;background:var(--card)}
+.av{width:40px;height:40px;border-radius:10px;flex:0 0 40px;display:flex;align-items:center;justify-content:center;font-weight:800;color:#0a0f1e;font-size:15px}
+.st{font-size:11px;font-weight:800;padding:2px 8px;border-radius:6px}
+.st.work{background:var(--green-bg);color:var(--green)}.st.wait{background:#20283f;color:var(--sec)}.st.attn{background:var(--orange-bg);color:var(--orange)}
+.row{display:flex;justify-content:space-between;gap:8px;font-size:13px;padding:7px 0;border-top:1px solid var(--line)}
+.row:first-child{border-top:0}
+.pill{font-size:11px;color:var(--sec)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;background:linear-gradient(135deg,var(--gold),#cf9f3d);color:#20160a;
+ border:0;border-radius:11px;padding:12px 18px;font-weight:800;font-size:14px;cursor:pointer;text-decoration:none;transition:transform .1s}
+.btn:active{transform:scale(.97)}
+.btn.sec{background:var(--card2);color:var(--txt);border:1px solid var(--line)}
+.btn.block{width:100%}
+.scn{display:flex;gap:8px;overflow-x:auto;padding:4px 2px 8px;scrollbar-width:none}
+.scn::-webkit-scrollbar{display:none}
+.scn button{flex:0 0 auto;background:var(--card2);border:1px solid var(--line);color:var(--txt);border-radius:11px;padding:10px 14px;font-size:13px;font-weight:700;cursor:pointer}
+.scn button.on{border-color:var(--gold);color:var(--gold)}
+#scnOut{margin-top:12px;min-height:80px}
+.result{background:var(--green-bg);border:1px solid #1c5a42;border-radius:12px;padding:12px 14px;color:#d6ffe9;font-size:14px;margin-top:10px;animation:fade .4s}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.offer{background:linear-gradient(180deg,var(--card2),var(--bg2));border:1px solid var(--line);border-radius:16px;padding:18px;text-align:center}
+.price{font-size:30px;font-weight:900;margin:6px 0}.price small{font-size:13px;color:var(--sec);font-weight:600}
+.decision{border-left:3px solid var(--orange);background:var(--orange-bg);padding:10px 12px;border-radius:0 10px 10px 0;margin-bottom:8px;font-size:13.5px}
+input,select{width:100%;background:var(--bg2);border:1px solid var(--line);color:var(--txt);border-radius:10px;padding:11px 12px;font-size:14px;margin-top:8px}
+label{font-size:12px;color:var(--sec);font-weight:600;margin-top:10px;display:block}
+nav.bottom{position:fixed;left:0;right:0;bottom:0;z-index:60;background:rgba(12,18,36,.92);backdrop-filter:blur(12px);
+ border-top:1px solid var(--line);display:flex;justify-content:space-around;padding:8px 4px calc(8px + env(safe-area-inset-bottom))}
+nav.bottom a{color:var(--sec);font-size:10px;text-decoration:none;display:flex;flex-direction:column;align-items:center;gap:3px;font-weight:700;padding:4px 8px;border-radius:9px}
+nav.bottom a svg{width:20px;height:20px}
+nav.bottom a.on{color:var(--gold)}
+.note{color:var(--dim);font-size:11.5px;margin-top:8px}
+.legend{display:flex;gap:12px;flex-wrap:wrap;font-size:11px;color:var(--sec);margin:2px 6px 0}
+.legend b{color:var(--txt)}
+footer{color:var(--dim);font-size:11.5px;text-align:center;margin:26px 0 8px;line-height:1.7}
+@media(max-width:720px){.g4{grid-template-columns:repeat(2,1fr)}.g3{grid-template-columns:1fr}.g2{grid-template-columns:1fr}h1{font-size:22px}.kpi .big{font-size:24px}}
+</style>
+</head>
+<body>
+<div class="demoflag">◆ WERSJA DEMO — dane syntetyczne, brak dostępu produkcyjnego, brak danych klientów ◆</div>
+<div class="wrap">
+
+<header class="hero" id="top">
+ <div class="brand"><div class="logo">MV</div> MV AUTOMATION · Centrum Dowodzenia</div>
+ <h1>Twoja firma pracuje, nawet gdy Ty nie pracujesz.</h1>
+ <p class="sub">Marketing, wiadomości, leady, sprzedaż i automatyzacje kontrolowane z jednego miejsca. Widzisz dowód, nie obietnice.</p>
+ <div class="livedot"><i></i> System aktywny · ostatni sygnał 2 sek temu <span style="color:var(--dim);font-weight:600">(DEMO)</span></div>
+</header>
+
+
+<h2 class="sec" id="wynik"><span class="n">1</span> Wynik firmy</h2>
+<div class="legend"><span><b>■</b> <span class="tag real">Przychód</span> = potwierdzona płatność</span><span><span class="tag pipe">Pipeline</span> = potencjał, nie pieniądze</span></div>
+<div class="grid g4" style="margin-top:10px">
+ <div class="card kpi"><div class="lab">Przychód potwierdzony <span class="tag real">real</span></div><div class="big">14 730 zł</div><div class="chg up">▲ 3 płatności / 7 dni</div><div class="spark" data-spark="3,5,4,8,6,9,12"></div></div>
+ <div class="card kpi"><div class="lab">Pipeline <span class="tag pipe">nie przychód</span></div><div class="big">61 200 zł</div><div class="chg muted">18 spraw otwartych</div></div>
+ <div class="card kpi"><div class="lab">Nowe leady (7 dni)</div><div class="big">37</div><div class="chg up">▲ 22%</div></div>
+ <div class="card kpi"><div class="lab">Checkouty rozpoczęte</div><div class="big">9</div><div class="chg up">konwersja 33%</div></div>
+ <div class="card kpi"><div class="lab">Konwersja lead→klient</div><div class="big">8,1%</div><div class="chg up">▲ 1,4 pp</div></div>
+ <div class="card kpi"><div class="lab">Koszt pozyskania (CAC)</div><div class="big">142 zł</div><div class="chg up">▼ 11%</div></div>
+ <div class="card kpi"><div class="lab">Zaoszczędzony czas</div><div class="big">31 h</div><div class="chg muted">w tym tygodniu</div></div>
+ <div class="card kpi"><div class="lab">Marża na wdrożeniu</div><div class="big">68%</div><div class="chg up">stabilna</div></div>
+</div>
+
+
+<h2 class="sec" id="agenci"><span class="n">2</span> Agenci teraz</h2>
+<div class="card">
+ <div class="flow" id="agentFlow">
+  <span class="node" data-a="Zwiadowca">Zwiadowca</span><span class="arr">→</span>
+  <span class="node" data-a="Matcher">Matcher</span><span class="arr">→</span>
+  <span class="node" data-a="Marketing">Marketing</span><span class="arr">→</span>
+  <span class="node" data-a="QA">QA</span><span class="arr">→</span>
+  <span class="node" data-a="Publikacja">Publikacja</span><span class="arr">→</span>
+  <span class="node" data-a="Domykacz">Domykacz</span><span class="arr">→</span>
+  <span class="node" data-a="Płatność">Płatność</span>
+ </div>
+ <div class="note">Kliknij scenariusz niżej, aby zobaczyć przepływ pracy agentów.</div>
+</div>
+<div class="grid g3" id="agentCards" style="margin-top:12px"></div>
+
+
+<h2 class="sec" id="skrzynka"><span class="n">3</span> Skrzynka i leady</h2>
+<div class="card">
+ <div class="row"><span><b>Nowe wiadomości</b></span><span class="pill">6 dziś</span></div>
+ <div class="row"><span>Zapytanie o wdrożenie n8n <span class="st work">HOT</span></span><span class="pill">właściciel: Domykacz · SLA 2 h · draft gotowy</span></div>
+ <div class="row"><span>Pytanie o cenę Video <span class="st wait">WARM</span></span><span class="pill">właściciel: Marketing · SLA 6 h · draft gotowy</span></div>
+ <div class="row"><span>Odpowiedź: „prześlijcie ofertę” <span class="st attn">DO REAKCJI</span></span><span class="pill">właściciel: Domykacz · SLA 1 h</span></div>
+ <div class="note">Treści wiadomości ukryte w wersji demo. Każdy lead ma właściciela, SLA i przygotowany draft.</div>
+</div>
+
+
+<h2 class="sec" id="fabryka"><span class="n">4</span> Fabryka marketingu</h2>
+<div class="card">
+ <div class="flow"><span class="node">brief</span><span class="arr">→</span><span class="node">nova (głos)</span><span class="arr">→</span><span class="node">FFmpeg</span><span class="arr">→</span><span class="node">QA ≥85</span><span class="arr">→</span><span class="node">publikacja</span><span class="arr">→</span><span class="node">pomiar</span></div>
+</div>
+<div class="grid g4" style="margin-top:12px">
+ <div class="card kpi"><div class="lab">Pomysły w kolejce</div><div class="big">14</div></div>
+ <div class="card kpi"><div class="lab">Rolki gotowe</div><div class="big">6</div><div class="chg up">QA śr. 89</div></div>
+ <div class="card kpi"><div class="lab">Opublikowane (7 dni)</div><div class="big">11</div></div>
+ <div class="card kpi"><div class="lab">Leady z treści</div><div class="big">19</div><div class="chg up">▲ 8</div></div>
+</div>
+
+
+<h2 class="sec" id="social"><span class="n">5</span> Social media</h2>
+<div class="grid g3">
+ <div class="card"><div class="row"><span><b>YouTube</b> <span class="st work">OK</span></span><span class="pill">2 dni temu</span></div><div class="row"><span>Zasięg</span><span>4 210</span></div><div class="row"><span>Kliknięcia → leady</span><span>52 / 7</span></div></div>
+ <div class="card"><div class="row"><span><b>Facebook</b> <span class="st work">OK</span></span><span class="pill">dziś</span></div><div class="row"><span>Zasięg</span><span>3 180</span></div><div class="row"><span>Kliknięcia → leady</span><span>44 / 6</span></div></div>
+ <div class="card"><div class="row"><span><b>Instagram</b> <span class="st work">OK</span></span><span class="pill">wczoraj</span></div><div class="row"><span>Zasięg</span><span>2 640</span></div><div class="row"><span>Kliknięcia → leady</span><span>38 / 5</span></div></div>
+ <div class="card"><div class="row"><span><b>LinkedIn</b> <span class="st wait">SETUP</span></span><span class="pill">konfiguracja</span></div><div class="row"><span>Status</span><span>oczekuje autoryzacji</span></div></div>
+ <div class="card"><div class="row"><span><b>TikTok</b> <span class="st wait">SETUP</span></span><span class="pill">konfiguracja</span></div><div class="row"><span>Status</span><span>planowane</span></div></div>
+ <div class="card"><div class="row"><span><b>X</b> <span class="st wait">SETUP</span></span><span class="pill">konfiguracja</span></div><div class="row"><span>Status</span><span>planowane</span></div></div>
+</div>
+
+
+<h2 class="sec" id="n8n"><span class="n">6</span> Automatyzacje n8n</h2>
+<div class="grid g4">
+ <div class="card kpi"><div class="lab">Aktywne workflowy</div><div class="big">12</div></div>
+ <div class="card kpi"><div class="lab">Wykonania (24 h)</div><div class="big">1 284</div></div>
+ <div class="card kpi"><div class="lab">Błędy → auto-naprawa</div><div class="big">3 → 3</div><div class="chg up">100% naprawione</div></div>
+ <div class="card kpi"><div class="lab">Uptime / oszczędność</div><div class="big">99,7%</div><div class="chg up">~26 h / mies.</div></div>
+</div>
+<div class="note" style="margin-left:6px">Ostatni heartbeat: 40 sek temu. Nazwy sekretów i endpointy techniczne nie są pokazywane.</div>
+
+
+<h2 class="sec" id="mailing"><span class="n">7</span> Mailing</h2>
+<div class="card" style="border-color:#1c5a42">
+ <div class="row"><span><b>Bramka bezpieczeństwa</b> <span class="st work">ZALETA</span></span><span class="pill">System nie wysyła do złych, niezainteresowanych ani zablokowanych adresów</span></div>
+</div>
+<div class="grid g4" style="margin-top:12px">
+ <div class="card kpi"><div class="lab">Zdrowie domeny</div><div class="big">DKIM/SPF/DMARC ✓</div></div>
+ <div class="card kpi"><div class="lab">Zgody (double opt-in)</div><div class="big">128</div><div class="chg up">▲ 12</div></div>
+ <div class="card kpi"><div class="lab">Wysłane / dostarczone</div><div class="big">96 / 94</div></div>
+ <div class="card kpi"><div class="lab">Bounce / wypisania</div><div class="big">1,1% / 2</div><div class="chg up">poniżej limitu</div></div>
+ <div class="card kpi"><div class="lab">Odpowiedzi</div><div class="big">11</div></div>
+ <div class="card kpi"><div class="lab">Leady z maila</div><div class="big">7</div></div>
+ <div class="card kpi"><div class="lab">Przychód z maila <span class="tag real">real</span></div><div class="big">2 970 zł</div></div>
+ <div class="card kpi"><div class="lab">Adresy zablokowane</div><div class="big">681</div><div class="chg muted">chronią reputację</div></div>
+</div>
+
+
+<h2 class="sec" id="posrednictwo"><span class="n">8</span> Pośrednictwo</h2>
+<div class="grid g4">
+ <div class="card kpi"><div class="lab">Znalezione okazje</div><div class="big">23</div></div>
+ <div class="card kpi"><div class="lab">Zweryfikowane</div><div class="big">9</div><div class="chg up">źródło + termin</div></div>
+ <div class="card kpi"><div class="lab">Dopasowani kupujący</div><div class="big">14</div></div>
+ <div class="card kpi"><div class="lab">Aktywne negocjacje</div><div class="big">3</div></div>
+ <div class="card kpi"><div class="lab">Wartość transakcji <span class="tag pipe">pipeline</span></div><div class="big">1,68 mln zł</div></div>
+ <div class="card kpi"><div class="lab">Prognozowana prowizja <span class="tag est">ESTYMACJA</span></div><div class="big">48 500 zł</div></div>
+ <div class="card kpi"><div class="lab">Prowizja potwierdzona <span class="tag real">real</span></div><div class="big">6 000 zł</div></div>
+ <div class="card kpi"><div class="lab">Model</div><div class="big">success fee</div></div>
+</div>
+
+
+<h2 class="sec" id="problemy"><span class="n">9</span> Problemy i naprawy</h2>
+<div class="grid g4">
+ <div class="card kpi"><div class="lab">Wykryto</div><div class="big">5</div></div>
+ <div class="card kpi"><div class="lab">Naprawa w toku</div><div class="big">2</div></div>
+ <div class="card kpi"><div class="lab">Naprawione dziś</div><div class="big">3</div><div class="chg up">z testem</div></div>
+ <div class="card kpi"><div class="lab">Do decyzji właściciela</div><div class="big">2 / 3</div></div>
+</div>
+<div class="card" style="margin-top:12px">
+ <div style="font-weight:800;margin-bottom:8px">Decyzje wymagające Ciebie (max 3)</div>
+ <div class="decision">Zatwierdzić publikację na nowo podłączonym kanale LinkedIn? <b>ROI: wysoki · ryzyko: niskie</b></div>
+ <div class="decision">Zatwierdzić kontakt z 3 nowymi firmami pośrednictwa? <b>ROI: wysoki · ryzyko: średnie</b></div>
+</div>
+
+
+<h2 class="sec" id="raport"><span class="n">10</span> Raport właściciela</h2>
+<div class="card">
+ <div class="row"><span>Co się wydarzyło dziś</span><span class="pill">11 publikacji, 37 leadów, 3 płatności</span></div>
+ <div class="row"><span>Co zarobiło <span class="tag real">real</span></span><span class="pill">14 730 zł + 6 000 zł prowizji</span></div>
+ <div class="row"><span>Co nie zadziałało</span><span class="pill">1 workflow padł — naprawiony automatycznie</span></div>
+ <div class="row"><span>Co system naprawił</span><span class="pill">3 błędy, wszystkie z testem</span></div>
+ <div class="row"><span>Co zrobi jutro</span><span class="pill">2 rolki, follow-up 9 leadów, 1 pilotaż pośrednictwa</span></div>
+ <div class="row"><span><b>Rekomendowana decyzja</b></span><span class="pill" style="color:var(--gold)">Zatwierdź LinkedIn — największy niewykorzystany zasięg</span></div>
+</div>
+
+
+<h2 class="sec" id="demo"><span class="n">▶</span> Zobacz system w akcji</h2>
+<div class="scn" id="scnBar"></div>
+<div class="card" id="scnOut"><div class="note">Wybierz scenariusz powyżej — pokażę animowany przepływ agentów i wynik. Demo nie wykonuje prawdziwych operacji.</div></div>
+
+
+<h2 class="sec" id="oferta"><span class="n">$</span> Zamów wdrożenie</h2>
+<div class="grid g3">
+ <div class="offer"><div style="font-weight:800">N8N RESCUE</div><div class="price">990 zł</div><div class="note">Audyt + naprawa automatyzacji n8n</div><a class="btn block" style="margin-top:12px" data-cta="n8n" href="https://kgregenevia-sys.github.io/mv/n8n-rescue.html?utm_source=demo_panel&utm_medium=cta&utm_campaign=mv_demo" target="_blank" rel="noopener">Zamów diagnozę</a></div>
+ <div class="offer"><div style="font-weight:800">VIDEO FACTORY</div><div class="price">990 zł <small>zaliczka</small></div><div class="note">Fabryka rolek i trailerów z pomiarem</div><a class="btn block" style="margin-top:12px" data-cta="video" href="https://kgregenevia-sys.github.io/mv/video-factory.html?utm_source=demo_panel&utm_medium=cta&utm_campaign=mv_demo" target="_blank" rel="noopener">Zamów wdrożenie</a></div>
+ <div class="offer"><div style="font-weight:800">LEAD FLOW / NEXION</div><div class="price">1 490 zł <small>zaliczka</small></div><div class="note">Obsługa leadów i API end-to-end</div><a class="btn block" style="margin-top:12px" data-cta="lead" href="https://kgregenevia-sys.github.io/mv/lead-flow.html?utm_source=demo_panel&utm_medium=cta&utm_campaign=mv_demo" target="_blank" rel="noopener">Zamów wdrożenie</a></div>
+</div>
+
+
+<h2 class="sec" id="gen"><span class="n">✦</span> Demo dla Twojej firmy</h2>
+<div class="card">
+ <label>Nazwa firmy</label><input id="fName" placeholder="np. Kowalski Nieruchomości">
+ <label>Branża</label>
+ <select id="fInd"><option value="nieruchomosci">Nieruchomości</option><option value="ecommerce">E-commerce</option><option value="uslugi">Usługi B2B</option><option value="produkcja">Produkcja</option><option value="gastronomia">Gastronomia</option></select>
+ <button class="btn block" style="margin-top:14px" id="genBtn">Zobacz, jak wyglądałoby to w Twojej firmie</button>
+ <div id="genOut"></div>
+ <div class="note">Estymacje oznaczone „ESTYMACJA” to prognoza, nie osiągnięty wynik. Generator nie używa prawdziwych danych firmy bez podstawy.</div>
+</div>
+
+<footer>
+ MV Automation — Interaktywne Demo Centrum Dowodzenia · Wszystkie dane są syntetyczne i oznaczone DEMO.<br>
+ Demo nie zawiera danych klientów, sekretów ani dostępu do systemów produkcyjnych. · <span id="metrics"></span>
+</footer>
+</div>
+
+<nav class="bottom">
+ <a href="#wynik" class="on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 13h4v8H3zM10 3h4v18h-4zM17 9h4v12h-4z"/></svg>Wynik</a>
+ <a href="#agenci"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a6 6 0 0112 0v1"/></svg>Agenci</a>
+ <a href="#demo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="6 4 20 12 6 20 6 4"/></svg>Demo</a>
+ <a href="#mailing"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>Mailing</a>
+ <a href="#oferta"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2l1.5 4h9L18 2M4 6h16l-1.5 12a2 2 0 01-2 1.7H7.5a2 2 0 01-2-1.7z"/></svg>Oferta</a>
+</nav>
+
+<script>
+(function(){ try{ if(window.top!==window.self){ window.top.location=window.self.location; } }catch(e){ document.documentElement.style.display="none"; }
+
+ // sparklines
+ document.querySelectorAll('[data-spark]').forEach(function(el){
+  var v=el.getAttribute('data-spark').split(',').map(Number),m=Math.max.apply(null,v);
+  el.innerHTML=v.map(function(x){return '<i style="height:'+Math.max(12,Math.round(x/m*100))+'%"></i>';}).join('');
+ });
+ // in-memory metrics (no storage APIs)
+ var M={clicks:0,forms:0,scenarios:0};
+ function render(){document.getElementById('metrics').textContent='Pomiar sesji (DEMO): '+M.clicks+' kliknięć CTA · '+M.scenarios+' scenariuszy · '+M.forms+' formularzy';}
+ render();
+ document.querySelectorAll('[data-cta]').forEach(function(a){a.addEventListener('click',function(){M.clicks++;render();});});
+
+ // agents
+ var agents=[
+  {n:'Zwiadowca',c:'#4d9bff',r:'Wyszukiwanie okazji',t:'Skan MSiG + przetargi',st:'work',stage:'źródło',next:'Verifier',res:'3 nowe okazje'},
+  {n:'Verifier',c:'#22c98a',r:'Weryfikacja i ryzyko',t:'Sprawdza źródło + duplikaty',st:'work',stage:'weryfikacja',next:'Matcher',res:'2/3 zaakceptowane'},
+  {n:'Matcher',c:'#E9C46A',r:'Dopasowanie',t:'Łączy popyt z podażą',st:'work',stage:'match ≥75%',next:'Marketing',res:'5 dopasowań'},
+  {n:'Oksana / Media',c:'#c084fc',r:'Treść i rolka',t:'nova + FFmpeg',st:'work',stage:'render',next:'QA',res:'1 rolka QA 89'},
+  {n:'QA Judge',c:'#ff9f43',r:'Jakość i dowody',t:'Content Gate ≥85',st:'attn',stage:'gate',next:'Publikacja',res:'PASS 89/100'},
+  {n:'Domykacz',c:'#22c98a',r:'Oferta i zamknięcie',t:'Prowadzi rozmowę',st:'work',stage:'negocjacja',next:'Revenue',res:'2 oferty wysłane'},
+  {n:'Revenue Ctrl',c:'#4d9bff',r:'Płatność i prowizja',t:'Sprawdza Stripe',st:'wait',stage:'płatność',next:'Kierownik',res:'1 płatność 990 zł'},
+  {n:'Kierownik',c:'#93a0be',r:'SLA i zamknięcie',t:'Pilnuje obiegu',st:'work',stage:'nadzór',next:'—',res:'0 spraw po SLA'}
+ ];
+ document.getElementById('agentCards').innerHTML=agents.map(function(a){
+  return '<div class="agent"><div class="av" style="background:'+a.c+'">'+a.n[0]+'</div><div style="flex:1">'+
+   '<div style="display:flex;justify-content:space-between;align-items:center"><b>'+a.n+'</b><span class="st '+a.st+'">'+(a.st==='work'?'PRACUJE':a.st==='attn'?'UWAGA':'CZEKA')+'</span></div>'+
+   '<div class="pill">'+a.r+'</div>'+
+   '<div class="row"><span>Zadanie</span><span>'+a.t+'</span></div>'+
+   '<div class="row"><span>Etap</span><span>'+a.stage+'</span></div>'+
+   '<div class="row"><span>Dowód</span><span>'+a.res+'</span></div>'+
+   '<div class="row"><span>Następny</span><span>'+a.next+'</span></div></div>';
+ }).join('');
+
+ // scenarios
+ var scn=[
+  {k:'Przyszedł nowy lead',flow:['Zwiadowca','Matcher','Marketing'],out:'Lead przypisany do Domykacza · SLA 2 h · draft odpowiedzi gotowy · dodany do CRM (case_id utworzony).'},
+  {k:'Klient odpowiedział na e-mail',flow:['Matcher','QA','Domykacz'],out:'Odpowiedź sklasyfikowana jako „gorąca” · Domykacz przygotował ofertę · następny krok: telefon w 24 h.'},
+  {k:'Powstała nowa rolka',flow:['Marketing','QA','Publikacja'],out:'brief → nova → FFmpeg → QA 89/100 → publikacja FB/IG/YT · permalink zapisany · pomiar startuje.'},
+  {k:'Workflow n8n padł',flow:['QA','Publikacja'],out:'Wykryto błąd wykonania · watchdog uruchomił auto-naprawę · retry OK · zero podwójnych wysyłek · incydent zamknięty z testem.'},
+  {k:'Klient rozpoczął płatność',flow:['Domykacz','Płatność'],out:'Checkout Stripe rozpoczęty · po potwierdzeniu płatności dostęp nadawany automatycznie · przychód policzony dopiero po potwierdzeniu.'},
+  {k:'System znalazł okazję pośrednictwa',flow:['Zwiadowca','Matcher','Domykacz'],out:'Okazja zweryfikowana (źródło + termin) · dopasowano 3 kupujących · model: success fee · karta oferty + Smart Link gotowe.'}
+ ];
+ var bar=document.getElementById('scnBar'),out=document.getElementById('scnOut');
+ bar.innerHTML=scn.map(function(s,i){return '<button data-i="'+i+'">'+s.k+'</button>';}).join('');
+ function runScn(i){
+  var s=scn[i];M.scenarios++;render();
+  Array.prototype.forEach.call(bar.children,function(b,j){b.className=j===i?'on':'';});
+  var nodes=document.querySelectorAll('#agentFlow .node');nodes.forEach(function(n){n.classList.remove('active');});
+  out.innerHTML='<div class="note">Uruchamiam scenariusz: <b style="color:var(--gold)">'+s.k+'</b> …</div>';
+  s.flow.forEach(function(name,step){
+   setTimeout(function(){
+    nodes.forEach(function(n){if(n.getAttribute('data-a')===name)n.classList.add('active');});
+   },step*450);
+  });
+  setTimeout(function(){
+   out.innerHTML='<div class="flow">'+s.flow.map(function(f){return '<span class="node active">'+f+'</span>';}).join('<span class="arr">→</span>')+'</div>'+
+    '<div class="result">✔ '+s.out+'</div>';
+  },s.flow.length*450+200);
+ }
+ bar.addEventListener('click',function(e){var b=e.target.closest('button');if(b)runScn(+b.getAttribute('data-i'));});
+
+ // personalized generator
+ var packs={nieruchomosci:['Auto-skan ogłoszeń i okazji poniżej wartości','Dopasowanie kupujących do ofert','Follow-up leadów z portali'],
+  ecommerce:['Odzysk porzuconych koszyków','Auto-odpowiedzi na zapytania','Raporty sprzedaży co rano'],
+  uslugi:['Kwalifikacja leadów z formularzy','Automatyczne oferty i przypomnienia','Obieg dokumentów i faktur'],
+  produkcja:['Zapytania ofertowe → wycena','Monitoring przetargów','Raport statusu zleceń'],
+  gastronomia:['Rezerwacje i potwierdzenia','Kampanie do stałych gości','Opinie i reputacja online']};
+ document.getElementById('genBtn').addEventListener('click',function(){
+  M.forms++;render();
+  var name=(document.getElementById('fName').value||'Twoja firma').trim();
+  var ind=document.getElementById('fInd').value;var list=packs[ind];
+  var save=6+Math.floor((name.length*7+ind.length*3)%14); // deterministic-ish, marked estimate
+  document.getElementById('genOut').innerHTML=
+   '<div class="result" style="background:var(--card2);border-color:var(--line);color:var(--txt)">'+
+   '<div style="font-weight:800;margin-bottom:6px">Plan dla: '+name+'</div>'+
+   '<div class="pill" style="margin-bottom:8px">Trzy dopasowane automatyzacje:</div>'+
+   list.map(function(x){return '<div class="row"><span>• '+x+'</span><span class="st work">gotowe do wdrożenia</span></div>';}).join('')+
+   '<div class="row"><span>Potencjalna oszczędność <span class="tag est">ESTYMACJA</span></span><span>~'+save+' h / tydzień</span></div>'+
+   '<div class="row"><span>Rekomendowany pakiet</span><span style="color:var(--gold);font-weight:800">'+(ind==='nieruchomosci'?'LEAD FLOW':ind==='ecommerce'?'VIDEO FACTORY':'N8N RESCUE')+'</span></div>'+
+   '<a class="btn block" data-cta="gen" style="margin-top:12px" href="https://kgregenevia-sys.github.io/mv/n8n-rescue.html?utm_source=demo_panel&utm_medium=generator&utm_campaign=mv_demo&industry='+ind+'" target="_blank" rel="noopener">Poproś o wersję demo dla swojej firmy</a></div>';
+  document.querySelector('[data-cta="gen"]').addEventListener('click',function(){M.clicks++;render();});
+ });
+
+ // bottom nav active state
+ var links=document.querySelectorAll('nav.bottom a');
+ window.addEventListener('scroll',function(){
+  var y=window.scrollY+120,cur=null;
+  ['wynik','agenci','demo','mailing','oferta'].forEach(function(id){var el=document.getElementById(id);if(el&&el.offsetTop<=y)cur=id;});
+  links.forEach(function(a){a.classList.toggle('on',a.getAttribute('href')==='#'+cur);});
+ },{passive:true});
+})();
+</script>
+</body>
+</html>
