@@ -1,0 +1,92 @@
+<!doctype html><html lang="pl"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'none'; base-uri 'none'; frame-ancestors 'none'">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<meta name="description" content="NEXION (MV Automation) — subskrypcje Starter, Pro i Enterprise. Automatyzacja marketingu, sprzedaży i obsługi w jednym systemie.">
+<title>NEXION — subskrypcje | MV Automation</title>
+<style>
+:root{--bg:#f6f7f9;--surface:#fff;--ink:#0f1729;--ink2:#475069;--muted:#6b7488;--line:#e6e8ee;--brand:#1b2a4a;--accent:#0e9f6e}
+*{box-sizing:border-box;margin:0;padding:0;min-width:0}
+html,body{width:100%;overflow-x:hidden}
+body{background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,Arial,sans-serif;line-height:1.5;font-size:16px}
+.wrap{width:100%;max-width:760px;margin:0 auto;padding:22px 16px 44px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:800;color:var(--brand)}
+.logo{width:34px;height:34px;border-radius:9px;background:var(--brand);color:#f4c66a;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:14px}
+h1{font-size:27px;line-height:1.18;letter-spacing:-.02em;margin:18px 0 8px;font-weight:800}
+.lead{font-size:16px;color:var(--ink2);max-width:620px}
+.toggle{display:inline-flex;background:#eef1f6;border:1px solid var(--line);border-radius:999px;padding:4px;margin:20px 0 8px;gap:4px}
+.toggle button{min-height:40px;padding:8px 16px;border:0;background:transparent;color:var(--ink2);font-weight:700;font-size:15px;border-radius:999px;cursor:pointer}
+.toggle button.on{background:#fff;color:var(--brand);box-shadow:0 1px 3px rgba(16,23,41,.12)}
+.plans{display:grid;gap:14px;margin-top:12px}
+@media(min-width:680px){.plans{grid-template-columns:repeat(3,minmax(0,1fr));align-items:start}}
+.plan{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:20px;box-shadow:0 1px 2px rgba(16,23,41,.04),0 6px 20px rgba(16,23,41,.06);display:flex;flex-direction:column}
+.plan.rec{border-color:var(--accent);box-shadow:0 0 0 2px rgba(14,159,110,.18),0 8px 24px rgba(16,23,41,.08)}
+.plan .rectag{align-self:flex-start;background:var(--accent);color:#fff;font-size:13px;font-weight:800;border-radius:999px;padding:3px 10px;margin-bottom:8px}
+.plan h2{font-size:18px;color:var(--brand);font-weight:800}
+.amt{font-size:30px;font-weight:800;letter-spacing:-.02em;margin:8px 0 2px}
+.amt small{font-size:15px;color:var(--muted);font-weight:600}
+.per{color:var(--muted);font-size:14px;min-height:20px}
+.plan ul{list-style:none;margin:14px 0 18px;padding:0;flex:1}
+.plan li{padding:7px 0 7px 24px;position:relative;font-size:15px;color:var(--ink2);border-top:1px solid var(--line)}
+.plan li:first-child{border-top:0}
+.plan li:before{content:"✓";position:absolute;left:0;color:var(--accent);font-weight:800}
+.btn{display:flex;align-items:center;justify-content:center;min-height:48px;background:var(--accent);color:#fff;text-decoration:none;font-weight:700;font-size:15px;border-radius:11px;border:0;cursor:pointer;width:100%}
+.btn.ghost{background:#fff;color:var(--brand);border:1px solid var(--line)}
+.note{color:var(--muted);font-size:14px;margin-top:10px}
+.pending{display:inline-block;background:#fdf6e7;color:#b7791f;border:1px solid #f0e2bf;border-radius:8px;padding:2px 8px;font-size:13px;font-weight:700}
+footer{color:var(--muted);font-size:14px;text-align:center;margin-top:26px;line-height:1.7}
+a{color:var(--brand)}
+</style></head>
+<body><div class="wrap">
+ <div class="brand"><div class="logo">MV</div> NEXION · MV Automation</div>
+ <h1>Automatyzacja marketingu, sprzedaży i obsługi — w abonamencie.</h1>
+ <p class="lead">NEXION prowadzi Twoje kampanie, leady i wiadomości, a Ty widzisz wynik i decyzje. Wybierz plan dopasowany do skali firmy.</p>
+
+ <div class="toggle" role="group" aria-label="Okres rozliczeniowy">
+  <button id="mBtn" class="on" aria-pressed="true">Miesięcznie</button>
+  <button id="yBtn" aria-pressed="false">Rocznie <span style="color:var(--accent)">−2 mies.</span></button>
+ </div>
+
+ <div class="plans">
+  <div class="plan">
+   <h2>Starter</h2>
+   <div class="amt" data-m="149 zł" data-y="149 zł">149 zł</div>
+   <div class="per" data-m="miesięcznie" data-y="tylko miesięcznie">miesięcznie</div>
+   <ul><li>Automatyzacja jednego procesu</li><li>Publikacje i podstawowe leady</li><li>Panel wyniku</li><li>Wsparcie e-mail</li></ul>
+   <button class="btn ghost" data-plan="starter" onclick="return order(this)">Wybieram Starter</button>
+  </div>
+  <div class="plan rec">
+   <div class="rectag">Rekomendowany</div>
+   <h2>Pro</h2>
+   <div class="amt" data-m="349 zł" data-y="3 490 zł">349 zł</div>
+   <div class="per" data-m="miesięcznie" data-y="rocznie (3 490 zł)">miesięcznie</div>
+   <ul><li>Wiele procesów i kanałów</li><li>Fabryka treści + lektor AI</li><li>Matching i alerty leadów</li><li>Priorytetowe wsparcie</li></ul>
+   <button class="btn" data-plan="pro" onclick="return order(this)">Wybieram Pro</button>
+  </div>
+  <div class="plan">
+   <h2>Enterprise</h2>
+   <div class="amt" data-m="1 490 zł" data-y="14 900 zł">1 490 zł</div>
+   <div class="per" data-m="miesięcznie" data-y="rocznie (14 900 zł)">miesięcznie</div>
+   <ul><li>Pełny ekosystem MV/NEXION</li><li>Dedykowane wdrożenie</li><li>Integracje i SLA</li><li>Opiekun konta</li></ul>
+   <a class="btn ghost" href="https://kgregenevia-sys.github.io/mv/lead-flow.html?utm_source=nexion&utm_medium=pricing&utm_campaign=nexion_sub&plan=enterprise">Zapytaj o Enterprise</a>
+  </div>
+ </div>
+ <p class="note" id="orderNote"></p>
+ <p class="note"><span class="pending">Płatność</span> Aktywacja płatności Stripe dla planów NEXION jest w przygotowaniu — po wyborze planu skontaktujemy się, aby dokończyć subskrypcję.</p>
+
+ <footer>NEXION jest marką MV Automation. Ceny zgodne z cennikiem. <a href="https://kgregenevia-sys.github.io/mv/">Wróć do oferty</a> · <a href="https://kgregenevia-sys.github.io/mv/demo-command-center.html">Zobacz demo</a></footer>
+</div>
+<script>
+(function(){
+ var m=document.getElementById('mBtn'),y=document.getElementById('yBtn'),period='m';
+ function apply(){document.querySelectorAll('.amt,.per').forEach(function(e){e.textContent=e.getAttribute('data-'+period);});
+  m.classList.toggle('on',period==='m');y.classList.toggle('on',period==='y');
+  m.setAttribute('aria-pressed',period==='m');y.setAttribute('aria-pressed',period==='y');}
+ m.addEventListener('click',function(){period='m';apply();});
+ y.addEventListener('click',function(){period='y';apply();});
+ window.order=function(btn){var p=btn.getAttribute('data-plan');
+  document.getElementById('orderNote').textContent='Wybrano plan: '+p.toUpperCase()+' ('+(period==='m'?'miesięcznie':'rocznie')+'). Aktywacja płatności w przygotowaniu — skontaktujemy się, aby dokończyć subskrypcję.';return false;};
+})();
+</script>
+</body></html>
