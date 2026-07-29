@@ -1,0 +1,194 @@
+<!doctype html><html lang="pl"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>MV Command Center</title>
+<style>
+:root{
+--bg:#07111f;--surface:#0d1b2e;--elev:#13243b;--tp:#f7f9fc;--ts:#9eb0c8;
+--accent:#6c7cff;--success:#22c55e;--warning:#f59e0b;--danger:#ef4444;--info:#38bdf8;
+--border:rgba(255,255,255,.08);--r:16px}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--bg);color:var(--tp);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;overflow-x:hidden}
+body{padding-bottom:78px}
+.hd{position:sticky;top:0;z-index:20;background:linear-gradient(180deg,#0a1626,rgba(10,22,38,.92));backdrop-filter:blur(8px);border-bottom:1px solid var(--border);padding:12px 16px calc(12px + env(safe-area-inset-top))}
+.hd .row{display:flex;align-items:center;gap:10px}
+.brand{font-size:15px;font-weight:800;letter-spacing:.14em}
+.brand .g{color:var(--accent)}
+.live{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--ts);margin-left:auto}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--success);box-shadow:0 0 0 0 rgba(34,197,94,.6);animation:pulse 2s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(34,197,94,.5)}70%{box-shadow:0 0 0 7px rgba(34,197,94,0)}100%{box-shadow:0 0 0 0 rgba(34,197,94,0)}}
+.status{margin-top:10px;display:flex;align-items:center;gap:8px;font-size:13px}
+.stpill{padding:4px 11px;border-radius:20px;font-weight:700;font-size:12px}
+.sync{color:var(--ts);font-size:11px;margin-left:auto}
+.rf{background:var(--elev);border:1px solid var(--border);color:var(--tp);width:34px;height:34px;border-radius:10px;font-size:15px;cursor:pointer}
+.wrap{padding:14px 16px;max-width:900px;margin:0 auto}
+h2{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--ts);margin:20px 2px 10px}
+.kpis{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.kpi{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:14px;position:relative;overflow:hidden}
+.kpi .n{font-size:30px;font-weight:800;line-height:1.05}
+.kpi .l{font-size:12px;color:var(--ts);margin-top:3px}
+.kpi .d{font-size:11px;margin-top:6px;color:var(--ts)}
+.kpi .bar{position:absolute;left:0;top:0;bottom:0;width:4px}
+.b-suc{background:var(--success)}.b-warn{background:var(--warning)}.b-dan{background:var(--danger)}.b-inf{background:var(--info)}.b-acc{background:var(--accent)}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:14px;margin-bottom:10px}
+.att{border-left:4px solid var(--warning)}
+.att.P1{border-left-color:var(--danger)}
+.att .p{display:inline-block;font-size:10px;font-weight:800;padding:2px 7px;border-radius:6px;background:rgba(245,158,11,.16);color:var(--warning)}
+.att.P1 .p{background:rgba(239,68,68,.16);color:var(--danger)}
+.att h3{margin:8px 0 4px;font-size:15px}
+.att .m{font-size:12.5px;color:var(--ts);line-height:1.5}
+.att .a{margin-top:9px;font-size:12.5px;background:var(--elev);border:1px solid var(--border);border-radius:10px;padding:8px 10px}
+.att .a b{color:var(--accent)}
+.agc{display:flex;gap:12px;align-items:flex-start}
+.av{flex:0 0 42px;height:42px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:15px;background:linear-gradient(135deg,#1c2f4d,#24406b);color:#cfe0ff}
+.agc .nm{font-weight:700;font-size:15px}
+.agc .ro{font-size:12px;color:var(--ts)}
+.st{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:700;margin-top:5px}
+.st .d2{width:8px;height:8px;border-radius:50%}
+.s-work{color:var(--success)}.s-work .d2{background:var(--success)}
+.s-wait{color:var(--info)}.s-wait .d2{background:var(--info)}
+.s-warn{color:var(--warning)}.s-warn .d2{background:var(--warning)}
+.s-dan{color:var(--danger)}.s-dan .d2{background:var(--danger)}
+.s-off{color:var(--ts)}.s-off .d2{background:var(--ts)}
+.tk{font-size:12.5px;color:var(--tp);margin-top:7px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.meta{font-size:11.5px;color:var(--ts);margin-top:6px}
+.chips{display:flex;gap:8px;overflow-x:auto;padding:2px 0 6px;scrollbar-width:none}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex:0 0 auto;background:var(--surface);border:1px solid var(--border);color:var(--ts);padding:7px 13px;border-radius:20px;font-size:12.5px;font-weight:600;cursor:pointer}
+.chip.on{background:var(--accent);color:#fff;border-color:var(--accent)}
+.badge{display:inline-block;font-size:10px;font-weight:800;padding:2px 7px;border-radius:6px}
+.bg-nx{background:rgba(108,124,255,.16);color:var(--accent)}
+.bg-mv{background:rgba(56,189,248,.15);color:var(--info)}
+.pill{font-size:11px;font-weight:700;padding:2px 8px;border-radius:20px;background:var(--elev);color:var(--ts)}
+.pill.ok{background:rgba(34,197,94,.15);color:var(--success)}
+.pill.blk{background:rgba(239,68,68,.15);color:var(--danger)}
+.pill.pend{background:rgba(245,158,11,.15);color:var(--warning)}
+.row2{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.res{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
+.res .c{background:var(--elev);border-radius:10px;padding:9px}.res .c .n{font-size:19px;font-weight:800}.res .c .l{font-size:11px;color:var(--ts)}
+.frozen{opacity:.75;border-style:dashed}
+a.lnk{color:var(--accent);text-decoration:none;font-weight:600;font-size:12.5px}
+.nav{position:fixed;left:0;right:0;bottom:0;z-index:30;background:rgba(10,22,38,.96);backdrop-filter:blur(10px);border-top:1px solid var(--border);display:flex;padding:6px 4px calc(6px + env(safe-area-inset-bottom))}
+.nav button{flex:1;background:none;border:0;color:var(--ts);font-size:10.5px;padding:6px 2px;cursor:pointer;min-height:44px;display:flex;flex-direction:column;align-items:center;gap:3px}
+.nav button .i{font-size:18px}
+.nav button.on{color:var(--accent)}
+.sec{display:none}.sec.on{display:block}
+.sk{background:linear-gradient(90deg,var(--surface),var(--elev),var(--surface));background-size:200% 100%;animation:sh 1.3s infinite;border-radius:var(--r);height:86px;margin-bottom:10px}
+@keyframes sh{0%{background-position:200% 0}100%{background-position:-200% 0}}
+.err{background:rgba(239,68,68,.12);border:1px solid var(--danger);color:#ffd7d7;border-radius:12px;padding:11px;font-size:12.5px;margin-bottom:10px;display:none}
+.muted{color:var(--ts);font-size:12px}
+</style></head><body>
+<div class="hd">
+ <div class="row"><div class="brand">MV <span class="g">COMMAND CENTER</span></div>
+ <div class="live"><span class="dot"></span>LIVE</div></div>
+ <div class="status"><span class="stpill" id="stp">…</span><span class="sync" id="sync">synchronizacja…</span>
+ <button class="rf" id="rf" title="Odśwież">⟳</button></div>
+</div>
+<div class="wrap">
+ <div class="err" id="err"></div>
+
+ <section class="sec on" id="s-pulpit">
+  <h2>Dzisiaj w 10 sekund</h2>
+  <div class="kpis" id="kpis"></div>
+  <h2>Wymaga Twojej decyzji</h2>
+  <div id="attn"></div>
+ </section>
+
+ <section class="sec" id="s-agenci">
+  <h2>Agenci teraz</h2>
+  <div class="chips" id="afilters"></div>
+  <div id="agents"></div>
+ </section>
+
+ <section class="sec" id="s-sprawy">
+  <h2>Sprawy (otwarte)</h2>
+  <div id="cases"></div>
+ </section>
+
+ <section class="sec" id="s-media">
+  <h2>Fabryka mediów</h2>
+  <div id="media"></div>
+ </section>
+
+ <section class="sec" id="s-wyniki">
+  <h2>Wynik biznesowy</h2>
+  <div id="results"></div>
+ </section>
+</div>
+
+<div class="nav">
+ <button data-t="pulpit" class="on"><span class="i">◧</span>Pulpit</button>
+ <button data-t="agenci"><span class="i">◍</span>Agenci</button>
+ <button data-t="sprawy"><span class="i">▤</span>Sprawy</button>
+ <button data-t="media"><span class="i">▶</span>Media</button>
+ <button data-t="wyniki"><span class="i">◆</span>Wyniki</button>
+</div>
+
+<script>
+const EMBEDDED={"ts": "2026-07-29T13:33:27.940252+00:00", "cases": [{"case": "e3463802", "goal": "offer", "stage": "scout", "result": "—", "status": "open", "product": "mv_other"}, {"case": "93d50699", "goal": "offer", "stage": "scout", "result": "—", "status": "open", "product": "mv_other"}, {"case": "ffa58d7a", "goal": "offer", "stage": "scout", "result": "—", "status": "open", "product": "mv_other"}, {"case": "44e5c9ed", "goal": "offer", "stage": "scout", "result": "—", "status": "open", "product": "mv_other"}, {"case": "171443d7", "goal": "offer", "stage": "scout", "result": "—", "status": "open", "product": "mv_other"}, {"case": "29bbdac8", "goal": "offer", "stage": "scout", "result": "—", "status": "open", "product": "mv_other"}, {"case": "3bddab06", "goal": "offer", "stage": "scout", "result": "—", "status": "open", "product": "mv_other"}, {"case": "db0ba241", "goal": "NEXION dla software house", "stage": "SCRIPTING", "result": "—", "status": "open", "product": "NEXION"}, {"case": "915b6118", "goal": "Nieruchomości: leady bez follow-upu = stracone prowizje", "stage": "SCRIPTING", "result": "—", "status": "open", "product": "MV_SERVICE"}, {"case": "96514b69", "goal": "E-commerce: obsługa zamówień 24/7", "stage": "SCRIPTING", "result": "—", "status": "open", "product": "MV_SERVICE"}, {"case": "aa53029d", "goal": "offer", "stage": "scout", "result": "—", "status": "open", "product": "mv_other"}, {"case": "e509aaba", "goal": "MV integracje → leady → oferta", "stage": "PUBLISHED", "result": "—", "status": "open", "product": "MV_SERVICE"}], "media": [{"id": "fd7b16f4", "qa": null, "url": null, "cost": 0, "views": null, "voice": "BLOCKED_NO_LICENSED_VOICE", "format": "youtube_short", "status": "READY_PREVIEW_BLOCKED_LICENSED_VOICE", "created": "2026-07-29T10:04:15.94258+00:00", "product": "NEXION", "owner_qa": "PENDING", "platform": "youtube&utm_medium=short&utm_campaign=nexion_content&utm_content=p1"}, {"id": "b56022b8", "qa": null, "url": null, "cost": 0, "views": null, "voice": "BLOCKED_NO_LICENSED_VOICE", "format": "reel_ig", "status": "READY_PREVIEW_BLOCKED_LICENSED_VOICE", "created": "2026-07-29T10:04:15.94258+00:00", "product": "MV_SERVICE", "owner_qa": "PENDING", "platform": "instagram&utm_medium=reel&utm_campaign=mv_portfolio_content&utm_content=p2"}, {"id": "b2c71183", "qa": null, "url": null, "cost": 0, "views": null, "voice": "BLOCKED_NO_LICENSED_VOICE", "format": "reel_fb", "status": "READY_PREVIEW_BLOCKED_LICENSED_VOICE", "created": "2026-07-29T10:04:15.94258+00:00", "product": "MV_SERVICE", "owner_qa": "PENDING", "platform": "facebook&utm_medium=reel&utm_campaign=mv_portfolio_content&utm_content=p3"}, {"id": "46e2ef27", "qa": 89, "url": "https://youtube.com/shorts/6qhHZo-DeC8", "cost": 0, "views": null, "voice": "TEMPORARY_PREVIEW", "format": "youtube_short", "status": "PUBLISHED_PILOT_PENDING_LICENSE_REVIEW", "created": "2026-07-29T09:30:32.61559+00:00", "product": "MV_SERVICE", "owner_qa": "PENDING", "platform": "youtube"}, {"id": "e4cbc670", "qa": 92, "url": "https://youtube.com/shorts/QwU1cUZwwKo", "cost": 0, "views": null, "voice": "TEMPORARY_PREVIEW", "format": "youtube_short", "status": "PUBLISHED_PILOT_PENDING_LICENSE_REVIEW", "created": "2026-07-29T09:29:00.720131+00:00", "product": "NEXION", "owner_qa": "PENDING", "platform": "youtube"}], "agents": [{"reg": "active", "next": null, "role": "Strateg", "agent": "strateg", "stage": "scout", "active": 24, "now_task": "Scout: Gmail TENDER od kontakt@mvautoai.net | =?UTF-8?Q?=F0=9F=8E=AF_2_nowych_przetarg=C3=", "quarantined": 0}, {"reg": "active", "next": "Ostap", "role": "Deliverability", "agent": "Wolodymyr", "stage": null, "active": 17, "now_task": "Stepan wzbogacil 5100 domen o miasto — uzyj do segmentacji wysylki", "quarantined": 0}, {"reg": "active", "next": null, "role": "Closer", "agent": "domykacz", "stage": null, "active": 8, "now_task": "Nowy lead Recepcja AI (kampania recepcja_ai) - oddzwon/umow analize", "quarantined": 0}, {"reg": "active", "next": "Kierownik", "role": "Sales", "agent": "Ostap", "stage": null, "active": 8, "now_task": "Odpisz: Gabinet Stomatologiczny Sejdak", "quarantined": 575}, {"reg": "active", "next": "media_producer", "role": "Content", "agent": "Oksana", "stage": "SCRIPTING", "active": 3, "now_task": "Brief+scenariusz preview: NEXION dla software house", "quarantined": 13}, {"reg": "active", "next": null, "role": "Manager", "agent": "Kierownik", "stage": null, "active": 2, "now_task": null, "quarantined": 0}, {"reg": "active", "next": null, "role": "Media production", "agent": "media_producer", "stage": null, "active": 2, "now_task": null, "quarantined": 0}, {"reg": "active", "next": null, "role": "Matcher", "agent": "matcher", "stage": null, "active": 0, "now_task": null, "quarantined": 0}, {"reg": "active", "next": null, "role": "Watchdog", "agent": "nadzorca", "stage": null, "active": 0, "now_task": null, "quarantined": 0}, {"reg": "active", "next": null, "role": "Product marketing", "agent": "product_marketing", "stage": null, "active": 0, "now_task": null, "quarantined": 0}, {"reg": "active", "next": null, "role": "Publisher", "agent": "content_distribution", "stage": null, "active": 0, "now_task": null, "quarantined": 0}, {"reg": "active", "next": null, "role": "Publisher", "agent": "publikator", "stage": null, "active": 0, "now_task": null, "quarantined": 0}, {"reg": "active", "next": null, "role": "Geocode", "agent": "Dmytro", "stage": null, "active": 0, "now_task": null, "quarantined": 11}, {"reg": "ghost", "next": null, "role": "UNREGISTERED — do not route (loop source)", "agent": "Sebastian", "stage": null, "active": 0, "now_task": null, "quarantined": 605}, {"reg": "active", "next": null, "role": "Content", "agent": "Bohdan", "stage": null, "active": 0, "now_task": null, "quarantined": 1}, {"reg": "active", "next": null, "role": "QA Judge", "agent": "qa_judge", "stage": null, "active": 0, "now_task": null, "quarantined": 0}, {"reg": "active", "next": null, "role": "Analyst", "agent": "analityk", "stage": null, "active": 0, "now_task": null, "quarantined": 0}, {"reg": "active", "next": null, "role": "Scout", "agent": "zwiadowca", "stage": null, "active": 0, "now_task": null, "quarantined": 0}], "business": {"consents": 0, "recepcja": "FROZEN", "nexion_subs": 1, "revenue_pln": 0, "mv_published": 1, "active_agents": 7, "total_published": 2, "nexion_published": 1, "smart_link_clicks": 105}, "workload": {"open": 64, "done_24h": 403, "quar_24h": 61, "failed_24h": 0, "processing": 0, "quar_total": 2091, "awaiting_qa": 0, "created_24h": 506, "failed_total": 563}, "attention": [{"prio": "P1", "count": 3, "owner": "media_producer", "action": "Dodaj AZURE_SPEECH_KEY + REGION do Edge Secrets", "impact": "3 preview nie mogą być renderowane finalnie", "problem": "Brak licencjonowanego głosu"}, {"prio": "P2", "count": 2, "owner": "qa_judge", "action": "Oceń 2 piloty (obraz/napisy/CTA)", "impact": "Blokuje akceptację i kolejne materiały", "problem": "Piloty czekają na OWNER_VISUAL_QA"}, {"prio": "P2", "count": 3, "owner": "engineer", "action": "Domknij przepięcie do credential store", "impact": "Jawne klucze w workflowach (JSON2Video, Meta, anon-JWT)", "problem": "Migracja 3 sekretów n8n"}]};
+const FETCH_URL="https://mdsvcobwuezriexyqqby.supabase.co/functions/v1/office-panel-data?t=d6dec2ae7a7047a4b685acdfecd400934c95620eeda44a5a88ee8bf3753a742e&apikey=sb_publishable_lV6ZDTZBc28d6dFJG3EI5Q_debW-aoA";
+let D=EMBEDDED, af='wszyscy';
+function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
+function ini(n){return (n||'?').replace(/[^A-Za-zĄĆĘŁŃÓŚŻŹąćęłńóśżź ]/g,'').trim().split(/\s+/).map(x=>x[0]).join('').slice(0,2).toUpperCase()||'A';}
+function rel(ts){try{const s=Math.max(0,(Date.now()-new Date(ts).getTime())/1000);if(s<60)return'przed chwilą';if(s<3600)return Math.floor(s/60)+' min temu';return Math.floor(s/3600)+' h temu';}catch(e){return''}}
+function agState(a){if(a.reg==='ghost')return['s-dan','GHOST_DISABLED'];if(a.active>0)return['s-work','PRACUJE'];return['s-off','CZEKA'];}
+function render(){
+ const b=D.business||{},w=D.workload||{},att=D.attention||[];
+ // header status
+ const p1=att.some(x=>x.prio==='P1');
+ const stp=document.getElementById('stp');
+ if(p1){stp.textContent='⚠ Wymaga uwagi';stp.style.background='rgba(245,158,11,.16)';stp.style.color='var(--warning)';}
+ else{stp.textContent='● Biuro pracuje';stp.style.background='rgba(34,197,94,.15)';stp.style.color='var(--success)';}
+ document.getElementById('sync').textContent='Sync: '+rel(D.ts);
+ // KPIs
+ const kpi=[
+  ['b-suc',b.active_agents??0,'Aktywni agenci',''],
+  ['b-warn',att.length,'Wymaga decyzji',att.length?('P1: '+att.filter(x=>x.prio==='P1').length):'brak pilnych'],
+  ['b-acc',b.total_published??0,'Opublikowane',(b.nexion_published||0)+' NEXION · '+(b.mv_published||0)+' MV'],
+  ['b-inf',b.smart_link_clicks??0,'Smart Link klik.',(b.consents||0)+' zgód'],
+  ['b-dan','0 zł','Przychód potw.','pipeline: 0']
+ ];
+ document.getElementById('kpis').innerHTML=kpi.map(k=>`<div class="kpi"><div class="bar ${k[0]}"></div><div class="n">${esc(k[1])}</div><div class="l">${esc(k[2])}</div><div class="d">${esc(k[3])}</div></div>`).join('');
+ // attention
+ document.getElementById('attn').innerHTML=att.length?att.map(x=>`<div class="card att ${esc(x.prio)}"><span class="p">${esc(x.prio)}</span><h3>${esc(x.problem)}${x.count?(' · '+x.count):''}</h3><div class="m">Wpływ: ${esc(x.impact)}<br>Odpowiedzialny: ${esc(x.owner)}</div><div class="a">Rekomendacja: <b>${esc(x.action)}</b></div></div>`).join(''):'<div class="card"><div class="muted">Brak otwartych decyzji.</div></div>';
+ // agents
+ const flt={'wszyscy':a=>true,'pracują':a=>a.reg!=='ghost'&&a.active>0,'czekają':a=>a.reg!=='ghost'&&a.active==0,'zablokowani':a=>a.reg==='ghost'}[af];
+ const fl=['wszyscy','pracują','czekają','zablokowani'];
+ document.getElementById('afilters').innerHTML=fl.map(f=>`<div class="chip ${f===af?'on':''}" data-f="${f}">${f}</div>`).join('');
+ const ag=(D.agents||[]).filter(flt);
+ document.getElementById('agents').innerHTML=ag.map(a=>{
+  const [cls,lab]=agState(a);
+  if(a.reg==='ghost')return `<div class="card"><div class="agc"><div class="av" style="background:linear-gradient(135deg,#3a1620,#5a1d2a);color:#ffb4b4">${ini(a.agent)}</div><div style="flex:1"><div class="nm">${esc(a.agent)}</div><div class="ro">${esc(a.role||'')}</div><div class="st s-dan"><span class="d2"></span>GHOST_DISABLED</div><div class="meta">Źródło pętli zatrzymane · ${a.quarantined||0} zadań w kwarantannie</div></div></div></div>`;
+  return `<div class="card"><div class="agc"><div class="av">${ini(a.agent)}</div><div style="flex:1"><div class="row2"><div><div class="nm">${esc(a.agent)}</div><div class="ro">${esc(a.role||'')}</div></div><div class="st ${cls}"><span class="d2"></span>${lab}</div></div>${a.now_task?`<div class="tk">${esc(a.now_task)}</div>`:'<div class="tk muted">brak aktywnego zadania</div>'}<div class="meta">${a.stage?('Etap: '+esc(a.stage)+' · '):''}${a.next?('Następny → '+esc(a.next)+' · '):''}Aktywne: ${a.active}</div></div></div></div>`;
+ }).join('')||'<div class="card muted">Brak agentów w tym filtrze.</div>';
+ // cases
+ document.getElementById('cases').innerHTML=(D.cases||[]).map(c=>`<div class="card"><div class="row2"><span class="badge ${c.product==='NEXION'?'bg-nx':'bg-mv'}">${esc(c.product)}</span><span class="pill">${esc(c.stage)}</span></div><div class="tk">${esc(c.goal)}</div><div class="meta">case ${esc(c.case)} · wynik: ${esc(c.result)}</div></div>`).join('')||'<div class="card muted">Brak otwartych spraw.</div>';
+ // media
+ document.getElementById('media').innerHTML=(D.media||[]).map(m=>{
+  const vp=m.voice==='BLOCKED_NO_LICENSED_VOICE'?'<span class="pill blk">głos zablokowany</span>':(m.voice?`<span class="pill">${esc(m.voice)}</span>`:'');
+  const sp=/PUBLISHED/.test(m.status||'')?'ok':(/BLOCKED/.test(m.status||'')?'blk':'pend');
+  return `<div class="card"><div class="row2"><span class="badge ${m.product==='NEXION'?'bg-nx':'bg-mv'}">${esc(m.product)}</span><span class="pill ${sp}">${esc(m.status)}</span></div><div class="meta" style="margin-top:8px">Format: ${esc(m.format||'—')} · Platforma: ${esc(m.platform||'—')} · QA: ${esc(m.qa??'—')} · Koszt: ${esc(m.cost??0)} zł ${m.views!=null?('· '+m.views+' wyśw.'):''}</div><div class="row2" style="margin-top:8px">${vp}${m.url?`<a class="lnk" href="${esc(m.url)}" target="_blank">Obejrzyj ↗</a>`:'<span></span>'}</div></div>`;
+ }).join('')||'<div class="card muted">Brak materiałów.</div>';
+ // results
+ const R=`<div class="card"><div class="row2"><b>NEXION</b><span class="badge bg-nx">flagowy</span></div><div class="res"><div class="c"><div class="n">${b.nexion_published||0}</div><div class="l">materiały</div></div><div class="c"><div class="n">${b.nexion_subs||0}</div><div class="l">subskrypcje</div></div><div class="c"><div class="n">${b.smart_link_clicks||0}</div><div class="l">kliknięcia (all)</div></div><div class="c"><div class="n">0 zł</div><div class="l">MRR</div></div></div></div>`+
+ `<div class="card"><div class="row2"><b>Pozostałe usługi MV</b><span class="badge bg-mv">portfolio</span></div><div class="res"><div class="c"><div class="n">${b.mv_published||0}</div><div class="l">materiały</div></div><div class="c"><div class="n">${b.consents||0}</div><div class="l">zgody/leady</div></div><div class="c"><div class="n">0</div><div class="l">oferty</div></div><div class="c"><div class="n">0 zł</div><div class="l">przychód</div></div></div></div>`+
+ `<div class="card frozen"><div class="row2"><b>Recepcja AI</b><span class="pill">FROZEN</span></div><div class="muted" style="margin-top:6px">Brak aktywnych działań — wyłączona ze strategii.</div></div>`;
+ document.getElementById('results').innerHTML=R;
+}
+// nav
+document.querySelectorAll('.nav button').forEach(btn=>btn.onclick=()=>{
+ document.querySelectorAll('.nav button').forEach(b=>b.classList.remove('on'));btn.classList.add('on');
+ document.querySelectorAll('.sec').forEach(s=>s.classList.remove('on'));
+ document.getElementById('s-'+btn.dataset.t).classList.add('on');window.scrollTo(0,0);
+});
+document.getElementById('afilters').addEventListener('click',e=>{const c=e.target.closest('.chip');if(c){af=c.dataset.f;render();}});
+async function refresh(){
+ if(!FETCH_URL)return;
+ try{const r=await fetch(FETCH_URL,{cache:'no-store'});const j=await r.json();
+  if(j&&j.ok&&j.data){D=j.data;document.getElementById('err').style.display='none';render();}
+  else if(j&&!j.ok){document.getElementById('err').style.display='block';document.getElementById('err').textContent='Dane: '+(j.error||'błąd')+(j.error==='invalid_or_expired'?' — poproś o świeży panel.':'');}
+ }catch(e){/* keep last good data silently (app renderer blocks fetch) */}
+}
+document.getElementById('rf').onclick=refresh;
+render(); refresh(); setInterval(refresh,45000);
+</script>
+</body></html>
