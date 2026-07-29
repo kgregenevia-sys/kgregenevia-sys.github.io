@@ -14,7 +14,8 @@
  --green:#22c98a;--green-bg:#0f2f24;--orange:#ff9f43;--orange-bg:#3a2611;--red:#ff6b6b;--blue:#4d9bff;
  --shadow:0 10px 30px rgba(0,0,0,.35);
 }
-*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;min-width:0}
+html,body{max-width:100%;overflow-x:hidden}
 body{background:radial-gradient(1200px 600px at 80% -10%,#16213f 0%,var(--bg) 60%);color:var(--txt);
  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Inter,Arial,sans-serif;line-height:1.5;padding-bottom:76px}
 .wrap{max-width:1180px;margin:0 auto;padding:16px}
@@ -36,8 +37,8 @@ h1{font-size:26px;line-height:1.2;margin:16px 0 8px;font-weight:800}
 h2.sec{font-size:13px;text-transform:uppercase;letter-spacing:.12em;color:var(--sec);margin:30px 6px 12px;font-weight:800;display:flex;align-items:center;gap:8px}
 h2.sec span.n{width:22px;height:22px;border-radius:6px;background:var(--card2);color:var(--gold);display:inline-flex;align-items:center;justify-content:center;font-size:11px;border:1px solid var(--line)}
 .grid{display:grid;gap:12px}
-.g2{grid-template-columns:repeat(2,1fr)}.g3{grid-template-columns:repeat(3,1fr)}.g4{grid-template-columns:repeat(4,1fr)}
-.card{background:linear-gradient(180deg,var(--card),var(--bg2));border:1px solid var(--line);border-radius:16px;padding:16px;box-shadow:var(--shadow)}
+.g2{grid-template-columns:repeat(2,minmax(0,1fr))}.g3{grid-template-columns:repeat(3,minmax(0,1fr))}.g4{grid-template-columns:repeat(4,minmax(0,1fr))}
+.card{background:linear-gradient(180deg,var(--card),var(--bg2));border:1px solid var(--line);border-radius:16px;padding:16px;box-shadow:var(--shadow);min-width:0}
 .kpi .lab{color:var(--sec);font-size:12.5px;font-weight:600;display:flex;justify-content:space-between;align-items:center}
 .kpi .big{font-size:28px;font-weight:800;margin-top:6px;letter-spacing:-.5px}
 .kpi .chg{font-size:12px;margin-top:4px;font-weight:700}
@@ -52,7 +53,7 @@ h2.sec span.n{width:22px;height:22px;border-radius:6px;background:var(--card2);c
 .node{background:var(--card2);border:1px solid var(--line);border-radius:9px;padding:6px 10px;font-size:12px;font-weight:700;white-space:nowrap}
 .node.active{background:var(--green-bg);border-color:#1c5a42;color:var(--green);box-shadow:0 0 0 3px rgba(34,201,138,.12)}
 .arr{color:var(--dim);font-size:12px}
-.agent{display:flex;gap:12px;align-items:flex-start;padding:12px;border:1px solid var(--line);border-radius:13px;background:var(--card)}
+.agent{display:flex;gap:12px;align-items:flex-start;padding:12px;border:1px solid var(--line);border-radius:13px;background:var(--card);min-width:0}
 .av{width:40px;height:40px;border-radius:10px;flex:0 0 40px;display:flex;align-items:center;justify-content:center;font-weight:800;color:#0a0f1e;font-size:15px}
 .st{font-size:11px;font-weight:800;padding:2px 8px;border-radius:6px}
 .st.work{background:var(--green-bg);color:var(--green)}.st.wait{background:#20283f;color:var(--sec)}.st.attn{background:var(--orange-bg);color:var(--orange)}
@@ -85,7 +86,8 @@ nav.bottom a.on{color:var(--gold)}
 .legend{display:flex;gap:12px;flex-wrap:wrap;font-size:11px;color:var(--sec);margin:2px 6px 0}
 .legend b{color:var(--txt)}
 footer{color:var(--dim);font-size:11.5px;text-align:center;margin:26px 0 8px;line-height:1.7}
-@media(max-width:720px){.g4{grid-template-columns:repeat(2,1fr)}.g3{grid-template-columns:1fr}.g2{grid-template-columns:1fr}h1{font-size:22px}.kpi .big{font-size:24px}}
+@media(max-width:720px){.g4{grid-template-columns:repeat(2,minmax(0,1fr))}.g3{grid-template-columns:1fr}.g2{grid-template-columns:1fr}h1{font-size:22px}.kpi .big{font-size:24px}}
+#agentCards{grid-template-columns:repeat(auto-fill,minmax(min(100%,240px),1fr))!important}
 </style>
 </head>
 <body>
@@ -290,13 +292,13 @@ footer{color:var(--dim);font-size:11.5px;text-align:center;margin:26px 0 8px;lin
   {n:'Kierownik',c:'#93a0be',r:'SLA i zamknięcie',t:'Pilnuje obiegu',st:'work',stage:'nadzór',next:'—',res:'0 spraw po SLA'}
  ];
  document.getElementById('agentCards').innerHTML=agents.map(function(a){
-  return '<div class="agent"><div class="av" style="background:'+a.c+'">'+a.n[0]+'</div><div style="flex:1">'+
+  return '<div class="agent"><div class="av" style="background:'+a.c+'">'+a.n[0]+'</div><div style="flex:1;min-width:0">'+
    '<div style="display:flex;justify-content:space-between;align-items:center"><b>'+a.n+'</b><span class="st '+a.st+'">'+(a.st==='work'?'PRACUJE':a.st==='attn'?'UWAGA':'CZEKA')+'</span></div>'+
    '<div class="pill">'+a.r+'</div>'+
    '<div class="row"><span>Zadanie</span><span>'+a.t+'</span></div>'+
    '<div class="row"><span>Etap</span><span>'+a.stage+'</span></div>'+
    '<div class="row"><span>Dowód</span><span>'+a.res+'</span></div>'+
-   '<div class="row"><span>Następny</span><span>'+a.next+'</span></div></div>';
+   '<div class="row"><span>Następny</span><span>'+a.next+'</span></div></div></div>';
  }).join('');
 
  // scenarios
