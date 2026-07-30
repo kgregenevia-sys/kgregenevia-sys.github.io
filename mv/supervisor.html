@@ -2,25 +2,43 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="referrer" content="no-referrer">
-<title>MV – AI Supervisor · Command Center</title>
+<title>MV – AI Supervisor · Logowanie</title>
 <style>
 html,body{margin:0;background:#0b1020;color:#e6e9f2;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,Arial,sans-serif}
-.msg{padding:40px 18px;max-width:620px;margin:0 auto}
-.msg h1{font-size:19px} .msg p{color:#8b93a7;font-size:14px;line-height:1.6}
-code{background:#121a34;border:1px solid #22305c;border-radius:6px;padding:2px 6px;font-size:13px}
+.box{max-width:420px;margin:0 auto;padding:56px 20px}
+h1{font-size:19px;display:flex;align-items:center;gap:9px}
+.logo{width:30px;height:30px;border-radius:8px;background:#16224a;color:#f4c66a;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:13px}
+p{color:#8b93a7;font-size:14px;line-height:1.6}
+input{width:100%;margin:14px 0 10px;padding:13px;border-radius:10px;border:1px solid #22305c;background:#121a34;color:#e6e9f2;font-size:15px}
+button{width:100%;padding:13px;border:0;border-radius:10px;background:#0e9f6e;color:#fff;font-weight:700;font-size:15px;cursor:pointer}
+.err{color:#f87171;font-size:13px;min-height:18px;margin-top:8px}
+.hint{font-size:12px;color:#6b7488;margin-top:14px}
 </style></head>
 <body>
-<div class="msg" id="msg"><h1>MV – AI Supervisor</h1><p>Wczytywanie panelu na żywo…</p></div>
+<div class="box" id="login">
+ <h1><span class="logo">MV</span> AI Supervisor</h1>
+ <p>Podaj token kontrolera, aby otworzyć panel na żywo. Token nie trafia do adresu URL ani historii — jest wysyłany wyłącznie w nagłówku <code>x-controller-token</code>.</p>
+ <input id="tok" type="password" autocomplete="off" placeholder="controller token" />
+ <button id="go">Otwórz panel</button>
+ <div class="err" id="err"></div>
+ <div class="hint">Sesja tylko w pamięci karty. Odświeżenie strony wymaga ponownego podania tokenu.</div>
+</div>
 <script>
 (function(){
   var FN="https://mdsvcobwuezriexyqqby.supabase.co/functions/v1/mv-sv-panel";
   var ANON="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1kc3Zjb2J3dWV6cmlleHlxcWJ5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgwNjMxMjMsImV4cCI6MjA5MzYzOTEyM30.o4CVcSf9drtDxlpVv11T_E3N4dd-BSTrQPRCZXfpusg";
-  var k=new URLSearchParams(location.search).get("k")||"";
-  if(!k){document.getElementById("msg").innerHTML="<h1>MV – AI Supervisor</h1><p>Brak tokenu. Otwórz adres z parametrem <code>?k=&lt;controller_token&gt;</code>.</p>";return;}
-  fetch(FN+"?k="+encodeURIComponent(k),{headers:{authorization:"Bearer "+ANON}})
-    .then(function(r){return r.text();})
-    .then(function(html){document.open();document.write(html);document.close();})
-    .catch(function(e){document.getElementById("msg").innerHTML="<h1>MV – AI Supervisor</h1><p>Błąd wczytywania: "+String(e)+"</p>";});
+  function open(){
+    var tok=document.getElementById("tok").value.trim();
+    var err=document.getElementById("err");
+    if(!tok){err.textContent="Wpisz token.";return;}
+    err.textContent="Wczytywanie…";
+    fetch(FN,{headers:{authorization:"Bearer "+ANON,"x-controller-token":tok}})
+      .then(function(r){if(r.status===401){throw new Error("Nieprawidłowy token.");}return r.text();})
+      .then(function(html){document.open();document.write(html);document.close();})
+      .catch(function(e){err.textContent=String(e.message||e);});
+  }
+  document.getElementById("go").addEventListener("click",open);
+  document.getElementById("tok").addEventListener("keydown",function(e){if(e.key==="Enter")open();});
 })();
 </script>
 </body></html>
